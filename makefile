@@ -2,11 +2,11 @@
  # João Vitor Morais
  # Kevin Carvalho
 
-EXECUTABLE       = monkeys
+EXECUTABLE       = prog
 SRC              = ./src
 INCLUDE          = ./include
 OBJ              = ./obj
-FLAGS            = -lm -pedantic -Wall -g
+FLAGS            = -lm -pedantic -Wall -g -lpthreads
 ADD_FLAGS        = -Wextra -O2
 COMPILER         = gcc   
 
