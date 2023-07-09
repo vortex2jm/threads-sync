@@ -6,7 +6,7 @@ EXECUTABLE       = prog
 SRC              = ./src
 INCLUDE          = ./include
 OBJ              = ./obj
-FLAGS            = -lm -pedantic -Wall -g -lpthreads
+FLAGS            = -lm -pedantic -Wall -g -lpthread
 ADD_FLAGS        = -Wextra -O2
 COMPILER         = gcc   
 
