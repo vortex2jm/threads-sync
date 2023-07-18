@@ -21,6 +21,12 @@ short l_monkeys = 0, r_monkeys = 0;
 // Quantidade de gorilas de cada lado que requisitaram a travessia
 short l_gorillas = 0, r_gorillas = 0;
 
+// Quantidade de macacos atravessando
+short crossing_monkeys = 0;
+
+// Quantidade de gorilas atravessando
+short crossing_gorilas = 0;
+
 // Indica se o primeiro macaco de cada lado está esperando para atravessar
 bool l_monkey_queue = false, r_monkey_queue = false;
 
@@ -83,7 +89,6 @@ void *monkey_routine(void *arg) {
       if (!l_monkeys) {
         l_monkeys++;
         l_monkey_queue = true;
-        sem_wait(&gorilla_sem);
         sem_wait(&monkey_sem);
         l_monkey_queue = false;
       } else {
@@ -91,6 +96,12 @@ void *monkey_routine(void *arg) {
         while (l_monkey_queue) {
         }
       }
+
+      // Espera enquanto algum gorila quer ou está atravessando
+      while (l_gorillas || r_gorillas || crossing_gorilas) {
+      }
+
+      crossing_monkeys++;
 
       printf("Monkey ( %.2d )[LEFT]  O..........>> CROSSING >>..........O\n", x);
       fflush(stdout);
@@ -102,17 +113,17 @@ void *monkey_routine(void *arg) {
       fflush(stdout);
 
       monkey_location = RIGHT;
+      crossing_monkeys--;
 
       if (l_monkeys == 1) {
-        sem_post(&gorilla_sem);
         sem_post(&monkey_sem);
       }
       l_monkeys--;
+
     } else {
       if (!r_monkeys) {
         r_monkeys++;
         r_monkey_queue = true;
-        sem_wait(&gorilla_sem);
         sem_wait(&monkey_sem);
         r_monkey_queue = false;
       } else {
@@ -120,6 +131,12 @@ void *monkey_routine(void *arg) {
         while (r_monkey_queue) {
         }
       }
+
+      // Espera enquanto algum gorila quer ou está atravessando
+      while (l_gorillas || r_gorillas || crossing_gorilas) {
+      }
+
+      crossing_monkeys++;
 
       printf("Monkey ( %.2d )[RIGHT] O..........<< CROSSING <<..........O\n", x);
       fflush(stdout);
@@ -131,9 +148,9 @@ void *monkey_routine(void *arg) {
       fflush(stdout);
 
       monkey_location = LEFT;
+      crossing_monkeys--;
 
       if (r_monkeys == 1) {
-        sem_post(&gorilla_sem);
         sem_post(&monkey_sem);
       }
       r_monkeys--;
@@ -151,9 +168,14 @@ void *gorilla_routine(void *arg) {
     // Mudando tempo em que um gorila entra na ponte
     sleep(rand() % MAX_ENTERING_TIME);
 
+    // Espera enquanto um ou mais macacos estão atravessando a ponte
+    while (crossing_monkeys) {
+    }
+
     if (gorilla_location == LEFT) {
       l_gorillas++;
       sem_wait(&gorilla_sem);
+      crossing_gorilas++;
 
       printf("Gorilla( %.2d )[LEFT]  O..........>> CROSSING >>..........O\n", x);
       fflush(stdout);
@@ -165,6 +187,7 @@ void *gorilla_routine(void *arg) {
       fflush(stdout);
 
       gorilla_location = RIGHT;
+      crossing_gorilas--;
 
       sem_post(&gorilla_sem);
       l_gorillas--;
@@ -172,6 +195,7 @@ void *gorilla_routine(void *arg) {
     } else {
       r_gorillas++;
       sem_wait(&gorilla_sem);
+      crossing_gorilas++;
 
       printf("Gorilla( %.2d )[RIGHT] O..........<< CROSSING <<..........O\n", x);
       fflush(stdout);
@@ -183,6 +207,7 @@ void *gorilla_routine(void *arg) {
       fflush(stdout);
 
       gorilla_location = LEFT;
+      crossing_gorilas--;
 
       sem_post(&gorilla_sem);
       r_gorillas--;
