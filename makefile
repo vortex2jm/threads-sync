@@ -46,7 +46,7 @@ execs:
 	@ echo $(YELLOW)
 	@ echo "Creating executables..."
 	@ $(COMPILER) $< $(OBJ)/monkey.o -o monkey $(FLAGS)
-	@ $(COMPILER) $< $(OBJ)/monkeys-and-gorillas.o -o monkeys-and-gorillas $(FLAGS)
+	@ $(COMPILER) $< $(OBJ)/monkeys-and-gorillas.o -o gorillas $(FLAGS)
 	@ $(COMPILER) $< $(OBJ)/Funcionarios.o $(OBJ)/MonitorBanheiro.o -o monitors $(FLAGS)
 	@ echo $(RESET_COLOR)
 
@@ -55,7 +55,7 @@ clean:
 	@ echo $(RED)
 	@ echo "Cleaning workspace..."
 	@ rm -rf $(OBJ) $(EXECUTABLE) *.txt
-	@ rm -f monitors monkey monkeys-and-gorillas
+	@ rm -f monitors monkey gorillas
 	@ echo $(RESET_COLOR)
 
 run-monkey:
@@ -63,9 +63,9 @@ run-monkey:
 	@ ./monkey
 	@ echo $(RESET_COLOR)
 
-run-monkeys-and-gorillas:
+run-gorillas:
 	@ echo $(CYAN)
-	@ ./monkeys-and-gorillas
+	@ ./gorillas
 	@ echo $(RESET_COLOR)
 
 run-monitors:
