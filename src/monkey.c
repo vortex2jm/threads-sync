@@ -25,7 +25,7 @@ int main(int argc, char const *argv[])
     pthread_t monkeys[MONKEYS_NUM];
     
     for (int i = 0; i < MONKEYS_NUM; i++){
-        usleep(1000);
+        usleep(10000);
         if(pthread_create(&monkeys[i], NULL, monkey_routine, &i)){
             perror("Failed to create thread!\n");
             exit(1);
