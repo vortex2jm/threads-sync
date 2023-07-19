@@ -2,7 +2,7 @@
  # João Vitor Morais
  # Kevin Carvalho
 
-EXECUTABLE       = prog
+# EXECUTABLE       = prog
 SRC              = ./src
 INCLUDE          = ./include
 OBJ              = ./obj
@@ -24,7 +24,7 @@ RESET_COLOR = "\033[0m"
 
 #===========================================================#
 # Main target
-all: clean create_dir $(OBJ_FILES) $(EXECUTABLE)
+all: clean create_dir $(OBJ_FILES) execs# $(EXECUTABLE)
 
 # Creatig objects directory
 create_dir: 
@@ -41,10 +41,13 @@ $(OBJ)/%.o: $(SRC)/%.c
 	@ echo $(RESET_COLOR)
 
 # Creating executable
-$(EXECUTABLE): 
+# $(EXECUTABLE):
+execs:
 	@ echo $(YELLOW)
-	@ echo "Creating executable..."
-	@ $(COMPILER) $< $(OBJ)/*.o -o $@ $(FLAGS)
+	@ echo "Creating executables..."
+	@ $(COMPILER) $< $(OBJ)/monkey.o -o monkey $(FLAGS)
+	@ $(COMPILER) $< $(OBJ)/monkeys-and-gorillas.o -o gorillas $(FLAGS)
+	@ $(COMPILER) $< $(OBJ)/Funcionarios.o $(OBJ)/MonitorBanheiro.o -o monitors $(FLAGS)
 	@ echo $(RESET_COLOR)
 
 # Cleaning workspace
@@ -52,10 +55,21 @@ clean:
 	@ echo $(RED)
 	@ echo "Cleaning workspace..."
 	@ rm -rf $(OBJ) $(EXECUTABLE) *.txt
+	@ rm -f monitors monkey gorillas
 	@ echo $(RESET_COLOR)
 
-run:
+run-monkey:
 	@ echo $(CYAN)
-	@ ./$(EXECUTABLE)
+	@ ./monkey
+	@ echo $(RESET_COLOR)
+
+run-gorillas:
+	@ echo $(CYAN)
+	@ ./gorillas
+	@ echo $(RESET_COLOR)
+
+run-monitors:
+	@ echo $(CYAN)
+	@ ./monitors
 	@ echo $(RESET_COLOR)
 
